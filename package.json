@@ -1,0 +1,19 @@
+{
+  "name": "@edenjs/admin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eden-js/admin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eden-js/admin/issues"
+  },
+  "homepage": "https://github.com/eden-js/admin#readme"
+}
