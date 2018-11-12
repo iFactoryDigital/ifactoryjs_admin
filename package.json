@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/eden-js/admin/issues"
   },
-  "homepage": "https://github.com/eden-js/admin#readme"
+  "homepage": "https://github.com/eden-js/admin#readme",
+  "dependencies": {
+    "dragula": "^3.7.2"
+  }
 }

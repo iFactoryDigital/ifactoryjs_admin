@@ -1,7 +1,180 @@
-// Default spacer
-$spacer : 1rem!default;
 
-// Alter navbar-admin
-.navbar-admin {
-  margin-bottom : ($spacer * 2);
+// import dragula
+@import '~dragula/dist/dragula';
+
+// set primary color
+$eden-admin-primary: #563d7c!default;
+
+// eden admin variables
+$eden-admin-navbar-height: ($spacer * 4)!default;
+$eden-admin-menu-background: $eden-admin-primary!default;
+
+// eden admin aside variables
+$eden-admin-aside-color: theme-color('light')!default;
+$eden-admin-aside-width: ($spacer * 4)!default;
+$eden-admin-aside-background: darken($eden-admin-primary, 10%)!default;
+$eden-admin-aside-hover-color: $white!default;
+$eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
+
+// eden admin styling
+.eden-admin {
+  width      : 100vw;
+  height     : 100vh;
+  overflow-x : hidden;
+
+  // set welcome
+  .jumbotron.jumbotron-welcome {
+    border-radius : 0;
+  }
+
+  // set navbar height
+  .eden-admin-navbar {
+    height : $eden-admin-navbar-height;
+
+    // set navbar
+    .navbar {
+      height        : 100%;
+      padding       : 0;
+      background    : $eden-admin-menu-background;
+      border-radius : 0;
+
+      // set navbar brand
+      .navbar-brand {
+        width      : 100%;
+        margin     : 0;
+        padding    : 0;
+        overflow   : hidden;
+        text-align : center;
+      }
+
+      // alter nav padding
+      .eden-admin-nav {
+        padding-left  : $spacer;
+        padding-right : $spacer;
+      }
+    }
+  }
+
+  // set aside width
+  .eden-admin-aside,
+  .eden-admin-logo {
+    width : $eden-admin-aside-width;
+    float : left;
+  }
+
+  // set aside height
+  .eden-admin-aside {
+    height     : calc(100vh - #{$eden-admin-navbar-height});
+    background : $eden-admin-aside-background;
+
+    // alter pills
+    .nav-pills.level-0 {
+
+      // nav item
+      > .nav-item {
+        z-index  : 20;
+        position : relative;
+
+        // set nav link
+        > .nav-link {
+          width         : $eden-admin-aside-width;
+          color         : $eden-admin-aside-color;
+          height        : $eden-admin-aside-width;
+          margin        : 0;
+          padding       : 0;
+          overflow      : hidden;
+          background    : $eden-admin-aside-background;
+          line-height   : $eden-admin-aside-width;
+          border-radius : 0;
+
+          // alter icon
+          i {
+            width        : $eden-admin-aside-width;
+            height       : $eden-admin-aside-width;
+            text-align   : center;
+            margin-right : $spacer;
+          }
+        }
+
+        // alter level 1
+        .nav-pills.level-1 {
+          top         : $eden-admin-aside-width;
+          left        : $eden-admin-aside-width;
+          width       : ($eden-admin-aside-width * 4);
+          display     : none;
+          position    : absolute;
+          line-height : $eden-admin-aside-width;
+
+          // normal nav link
+          .nav-link {
+            width         : auto;
+            color         : $eden-admin-primary;
+            margin        : 0;
+            padding       : 0;
+            background    : theme-color('light');
+            padding-left  : $spacer;
+            padding-right : $spacer;
+            border-radius : 0;
+
+            i {
+              width        : ($eden-admin-aside-width / 2);
+              text-align   : center;
+              margin-right : ($spacer / 2);
+            }
+
+            // active/hover augment
+            &.active,
+            &:hover {
+              color      : $eden-admin-aside-hover-color;
+              background : $eden-admin-aside-hover-background;
+            }
+          }
+        }
+
+        // active/hover augment
+        &.active,
+        &:hover {
+
+          // display block level 1 navs
+          .nav-pills.level-1 {
+            display : block;
+          }
+
+          // hover nav
+          &:hover {
+            > .nav-link {
+              width : ($eden-admin-aside-width * 5);
+            }
+          }
+
+          // active/hover nav link
+          > .nav-link {
+            color      : $eden-admin-aside-hover-color;
+            background : $eden-admin-aside-hover-background;
+          }
+        }
+      }
+    }
+  }
+
+  // make navbar width
+  .eden-admin-main,
+  .eden-admin-nav {
+    width : calc(100vw - #{$eden-admin-aside-width});
+  }
+
+  // set main height
+  .eden-admin-main {
+    height      : calc(100vh - #{$eden-admin-navbar-height});
+    overflow-y  : scroll;
+    overflow-x  : hidden;
+    margin-left : $eden-admin-aside-width;
+
+    // container dashbaord
+    .container-dashboard > .row {
+      min-height    : $spacer;
+      margin-top    : ($spacer / 2);
+      margin-bottom : ($spacer / 2);
+    }
+  }
 }

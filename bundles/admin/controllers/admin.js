@@ -1,6 +1,9 @@
 // Require local class dependencies
 const Controller = require('controller');
 
+// get helpers
+const DashboardHelper = helper('dashboard');
+
 /**
  * Create Admin Controller class. Only visible to people with the 'admin.view' role
  *
@@ -34,11 +37,13 @@ class AdminController extends Controller {
    * @view     admin
    * @route    {get}   /
    * @layout   admin
-   * @priority 15
+   * @priority 100
    */
-  indexAction (req, res) {
+  async indexAction (req, res) {
     // Render admin page
-    res.render('admin');
+    res.render('admin', {
+      'dashboard' : await DashboardHelper.render('admin.home', req.user)
+    });
   }
 
 }

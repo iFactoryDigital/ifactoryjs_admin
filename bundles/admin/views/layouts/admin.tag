@@ -1,32 +1,29 @@
 <admin-layout>
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark px-0">
-    <div class="container-fluid d-block">
-      <div class="row">
-        <div class="col-sm-3 col-md-2">
+
+  <div class="eden-admin">
+    <div class="eden-admin-navbar">
+      <nav class="navbar navbar-sm navbar-expand-md navbar-dark">
+        <div class="eden-admin-logo">
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <a class="navbar-brand d-md-block text-center" href="/">
-            { this.config.title }
+            <i class="fa fa-admin" />
           </a>
         </div>
-        <div class="col-sm-9 ml-sm-auto col-md-10">
+        <main class="eden-admin-nav">
           <div class="collapse navbar-collapse" id="navbar-nav">
-            <menu name="MAIN" classes={ menuClass } base="/" class="ml-auto" />
+            
           </div>
-        </div>
-      </div>
+        </main>
+      </nav>
     </div>
-  </nav>
-
-  <div class="container-fluid">
-    <div class="row">
-      <menu name="ADMIN" base="/admin" classes={ this.adminMenuClass } class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar pt-3" />
-
-      <main class="col-sm-9 ml-sm-auto col-md-10 pt-4 px-4" role="main">
-        <div data-is={ this.view } opts={ this.state } ref="page" class="main-page" />
-      </main>
-    </div>
+    <aside class="eden-admin-aside">
+      <menu name="ADMIN" base="/admin" classes={ this.adminMenuClass } />
+    </aside>
+    <main class="eden-admin-main">
+      <div data-is={ this.view } opts={ this.state } ref="page" class="main-page" />
+    </main>
   </div>
 
   <toast />
