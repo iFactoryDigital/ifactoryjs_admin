@@ -1,6 +1,6 @@
 <dashboard>
   <div class="dashboard">
-    <div class="dashboard-options mb-4">
+    <div class="dashboard-options my-4">
       <div class="row row-eq-height">
         <div class="col-md-8">
           <h2 class="m-0">
@@ -55,6 +55,7 @@
 
     // set update
     this.rows      = [1, 2, 3, 4, 5, 6, 7, 8];
+    this.type      = opts.type;
     this.widgets   = [];
     this.current   = '';
     this.loading   = {};
@@ -113,12 +114,15 @@
      * @param  {Event}  e
      * @param  {Object} widget
      */
-    async onSaveWidget (widget, data) {
-      // set loading
-      widget.saving = true;
+    async onSaveWidget (widget, data, preventUpdate) {
+      // prevent update check
+      if (!preventUpdate) {
+        // set loading
+        widget.saving = true;
 
-      // update view
-      this.update();
+        // update view
+        this.update();
+      }
 
       // log data
       let res = await fetch('/dashboard/' + this.dashboard.get('id') + '/widget/save', {
@@ -141,12 +145,15 @@
         // clone to dashboard
         data[key] = result.result[key];
       }
+      
+      // check prevent update
+      if (!preventUpdate) {
+        // set loading
+        delete widget.saving;
 
-      // set loading
-      delete widget.saving;
-
-      // update view
-      this.update();
+        // update view
+        this.update();
+      }
     }
 
     /**
@@ -515,18 +522,43 @@
         jQuery(this.refs.dashboard).removeClass('is-dragging');
       });
     }
+    
+    /**
+     * on update
+     *
+     * @type {update}
+     */
+    this.on('update', () => {
+      // check frontend
+      if (!this.eden.frontend) return;
+      
+      // check type
+      if (opts.type !== this.type) {
+        // set type
+        this.type = opts.type;
+        
+        // trigger mount
+        this.trigger('mount');
+      }
+    });
 
     /**
      * on mount
      *
-     * @type {Mount}
+     * @type {mount}
      */
     this.on('mount', () => {
       // check frontend
       if (!this.eden.frontend) return;
       
       // init dragula
-      if (!this.dragula) this.initDragula();      
+      if (!this.dragula) this.initDragula();
+  
+      // set dashboards
+      let dashboards = (opts.dashboard || {}).dashboards;
+      
+      // set dashboard
+      this.dashboard = dashboards && dashboards.length ? this.model('dashboard', dashboards[0]) : this.model('dashboard', {});
 
       // check id
       if (this.dashboard.get('id')) this.loadWidgets(this.dashboard);
@@ -550,8 +582,6 @@
           // set value
           found[key] = widget[key];
         }
-        
-        console.log(this.widgets);
         
         // update
         this.update();

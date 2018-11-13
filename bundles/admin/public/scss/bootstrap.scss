@@ -22,8 +22,8 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
   height     : 100vh;
   overflow-x : hidden;
 
-  // set welcome
-  .jumbotron.jumbotron-welcome {
+  // set admin
+  .jumbotron.jumbotron-admin {
     border-radius : 0;
   }
 
@@ -135,13 +135,12 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
         &.active,
         &:hover {
 
-          // display block level 1 navs
-          .nav-pills.level-1 {
-            display : block;
-          }
-
           // hover nav
           &:hover {
+            .nav-pills.level-1 {
+              display : block;
+            }
+
             > .nav-link {
               width : ($eden-admin-aside-width * 5);
             }
@@ -194,7 +193,6 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
   .eden-admin-main {
     height      : calc(100vh - #{$eden-admin-navbar-height});
     overflow-y  : scroll;
-    overflow-x  : hidden;
     margin-left : $eden-admin-aside-width;
 
     // container dashbaord

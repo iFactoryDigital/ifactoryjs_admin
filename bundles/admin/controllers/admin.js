@@ -42,6 +42,9 @@ class AdminController extends Controller {
   async indexAction (req, res) {
     // Render admin page
     res.render('admin', {
+      'name'      : 'Admin Home',
+      'type'      : 'admin.home',
+      'jumbotron' : 'Welcome back, ' + req.user.get('username') + '!',
       'dashboard' : await DashboardHelper.render('admin.home', req.user)
     });
   }

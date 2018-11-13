@@ -34,7 +34,7 @@ class DashboardController extends Controller {
     DashboardHelper.widget('dashboard.notes', {
       'title'       : 'Notes Widget',
       'description' : 'Lets you add notes to a widget'
-    }, async (data, widget) => {
+    }, async (req, widget) => {
       // get notes widget from db
       let widgetModel = await Widget.findOne({
         'uuid' : widget.uuid
@@ -49,7 +49,7 @@ class DashboardController extends Controller {
         'title'   : widgetModel.get('title') || '',
         'content' : widgetModel.get('content') || ''
       };
-    }, async (data, widget) => {
+    }, async (req, widget) => {
       // get notes widget from db
       let widgetModel = await Widget.findOne({
         'uuid' : widget.uuid
@@ -59,8 +59,8 @@ class DashboardController extends Controller {
       });
 
       // set data
-      widgetModel.set('title',   data.title);
-      widgetModel.set('content', data.content);
+      widgetModel.set('title',   req.body.data.title);
+      widgetModel.set('content', req.body.data.content);
 
       // save widget
       await widgetModel.save();
@@ -170,7 +170,7 @@ class DashboardController extends Controller {
     let registered = DashboardHelper.widgets().find((w) => w.type === current.type);
 
     // await save
-    await registered.save(req.body.data, current);
+    await registered.save(req, current);
 
     // get rendered
     let rendered = await registered.render(req, current);
@@ -224,7 +224,7 @@ class DashboardController extends Controller {
    */
   createAction () {
     // return update action
-    return this.updateSubmitAction(...arguments);
+    return this.updateAction(...arguments);
   }
 
   /**
