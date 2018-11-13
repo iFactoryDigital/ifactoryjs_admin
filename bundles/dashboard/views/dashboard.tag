@@ -37,9 +37,9 @@
         </div>
       </div>
     </div>
-    <div ref="dashboard" class="widget-placements">
+    <div ref="dashboard" class="widget-placements" if={ !this.placing }>
       <div each={ row, x in this.rows } data-row={ x } class="row mb-3 row-eq-height">
-        <div each={ widget, i in getWidgets(x) } data-widget={ widget.uuid } if={ getWidgetData(widget) } class="col" data-is="widget-{ getWidgetData(widget).tag }" data={ getWidgetData(widget) } widget={ widget } on-save={ this.onSaveWidget } on-refresh={ this.onRefreshWidget } />
+        <div each={ widget, i in getWidgets(x) } data-widget={ widget.uuid } if={ getWidgetData(widget) } class="col" data-is="widget-{ getWidgetData(widget).tag }" data={ getWidgetData(widget) } widget={ widget } on-save={ this.onSaveWidget } on-remove={ onRemoveWidget } on-refresh={ this.onRefreshWidget } />
       </div>
     </div>
   </div>
@@ -186,6 +186,57 @@
 
       // set loading
       delete widget.refreshing;
+
+      // update view
+      this.update();
+    }
+
+    /**
+     * on refresh widget
+     *
+     * @param  {Event}  e
+     * @param  {Object} widget
+     */
+    async onRemoveWidget (widget, data) {
+      // set loading
+      widget.removing = true;
+
+      // update view
+      this.update();
+
+      // log data
+      let res = await fetch('/dashboard/' + this.dashboard.get('id') + '/widget/remove', {
+        'body' : JSON.stringify({
+          'data'   : data,
+          'widget' : widget
+        }),
+        'method'  : 'post',
+        'headers' : {
+          'Content-Type' : 'application/json'
+        },
+        'credentials' : 'same-origin'
+      });
+
+      // load data
+      let result = await res.json();
+
+      // remove from everywhere
+      this.dashboard.set('widgets', this.dashboard.get('widgets').filter((w) => {
+        // check found in row
+        return widget.uuid !== w.uuid;
+      }));
+
+      // set placements
+      this.dashboard.set('placements', this.dashboard.get('placements').map((row) => {
+        // filter row
+        return row.filter((id) => id !== widget.uuid);
+      }));
+
+      // save dashboard
+      await this.saveDashboard(this.dashboard);
+
+      // set loading
+      delete widget.removing;
 
       // update view
       this.update();
@@ -387,11 +438,19 @@
       // set placements
       this.dashboard.set('placements', placements);
 
+      // set placing
+      this.placing = false;
+
+      // update view
+      this.update();
+      
+      // init dragula again
+      this.initDragula();
+
       // save
       await this.saveDashboard(this.dashboard);
 
       // set loading
-      this.placing = false;
       this.loading.placements = false;
 
       // update view
@@ -436,21 +495,16 @@
       // update view
       this.update();
     }
-
+    
     /**
-     * on mount
-     *
-     * @type {Mount}
+     * init dragula
      */
-    this.on('mount', () => {
-      // check frontend
-      if (!this.eden.frontend) return;
-
+    initDragula () {
       // require dragula
       const dragula = require('dragula');
-
+      
       // do dragula
-      if (!this.dragula) this.dragula = dragula(jQuery('.row', this.refs.dashboard).toArray()).on('drop', (el, target, source, sibling) => {
+      this.dragula = dragula(jQuery('.row', this.refs.dashboard).toArray()).on('drop', (el, target, source, sibling) => {
         // save order
         this.savePlacements();
       }).on('drag', () => {
@@ -460,9 +514,48 @@
         // remove is dragging
         jQuery(this.refs.dashboard).removeClass('is-dragging');
       });
+    }
+
+    /**
+     * on mount
+     *
+     * @type {Mount}
+     */
+    this.on('mount', () => {
+      // check frontend
+      if (!this.eden.frontend) return;
+      
+      // init dragula
+      if (!this.dragula) this.initDragula();      
 
       // check id
       if (this.dashboard.get('id')) this.loadWidgets(this.dashboard);
+      
+      // loads widget
+      socket.on('dashboard.' + this.dashboard.get('id') + '.widget', (widget) => {
+        // get found
+        let found = this.widgets.find((w) => w.uuid === widget.uuid);
+        
+        // check found
+        if (!found) {
+          // push
+          this.widgets.push(widget);
+          
+          // return update
+          return this.update();
+        }
+        
+        // set values
+        for (let key in widget) {
+          // set value
+          found[key] = widget[key];
+        }
+        
+        console.log(this.widgets);
+        
+        // update
+        this.update();
+      });
     });
   </script>
 </dashboard>

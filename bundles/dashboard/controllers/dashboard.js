@@ -1,6 +1,7 @@
 
 // require dependencies
 const Grid       = require('grid');
+const socket     = require('socket');
 const Controller = require('controller');
 
 // require models
@@ -8,6 +9,7 @@ const Widget    = model('widget');
 const Dashboard = model('dashboard');
 
 // require helpers
+const ModelHelper     = helper('model');
 const DashboardHelper = helper('dashboard');
 
 /**
@@ -63,6 +65,37 @@ class DashboardController extends Controller {
       // save widget
       await widgetModel.save();
     });
+  }
+
+  /**
+   * socket listen action
+   *
+   * @param  {String} id
+   * @param  {Object} opts
+   *
+   * @call   model.listen.dashboard
+   * @return {Async}
+   */
+  async listenAction (id, uuid, opts) {
+    // join room
+    opts.socket.join('dashboard.' + id);
+
+    // add to room
+    return await ModelHelper.listen(opts.sessionID, await Dashboard.findById(id), uuid);
+  }
+
+  /**
+   * socket listen action
+   *
+   * @param  {String} id
+   * @param  {Object} opts
+   *
+   * @call   model.deafen.dashboard
+   * @return {Async}
+   */
+  async liveDeafenAction (id, uuid, opts) {
+    // add to room
+    return await ModelHelper.deafen(opts.sessionID, await Dashboard.findById(id), uuid);
   }
 
   /**
@@ -139,11 +172,47 @@ class DashboardController extends Controller {
     // await save
     await registered.save(req.body.data, current);
 
+    // get rendered
+    let rendered = await registered.render(req, current);
+
+    // set uuid
+    rendered.uuid = req.body.widget.uuid;
+
+    // emit
+    socket.room('dashboard.' + dashboard.get('_id').toString(), 'dashboard.' + dashboard.get('_id').toString() + '.widget', rendered);
+
     // return JSON
     res.json({
       'state'   : 'success',
-      'result'  : await registered.render(req, current),
+      'result'  : rendered,
       'message' : 'Successfully saved widget'
+    });
+  }
+
+  /**
+   * remove widget action
+   *
+   * @route    {post} /:id/widget/remove
+   * @layout   admin
+   * @priority 12
+   */
+  async removeWidgetAction (req, res) {
+    // get notes widget from db
+    let widgetModel = await Widget.findOne({
+      'uuid' : req.body.widget.uuid
+    }) || new Widget({
+      'uuid' : req.body.widget.uuid,
+      'type' : req.body.widget.type
+    });
+
+    // remove widget
+    if (widgetModel.get('_id')) await widgetModel.remove();
+
+    // return JSON
+    res.json({
+      'state'   : 'success',
+      'result'  : null,
+      'message' : 'Successfully removed widget'
     });
   }
 
