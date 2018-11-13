@@ -1,5 +1,5 @@
 <widget-notes>
-  <widget on-refresh={ opts.onRefresh } widget={ opts.widget } data={ opts.data } on-update-title={ onUpdateTitle } on-complete-update-title={ onCompleteUpdateTitle } on-should-update-title={ onShouldUpdateTitle } on-update-content={ onUpdateContent } ref="widget">
+  <widget on-refresh={ opts.onRefresh } widget={ opts.widget } data={ opts.data } on-update-title={ onUpdateTitle } on-complete-update-title={ onCompleteUpdateTitle } on-should-update-title={ onShouldUpdateTitle } on-update-content={ onUpdateContent } ref="widget" class="widget-notes">
     <yield to="header">
 
       <i if={ !opts.data.title && !this.updating.title }>Untitled Notes</i>
@@ -26,7 +26,7 @@
 
     </yield>
     <yield to="body">
-      <div class="card-body">
+      <div class="card-body p-0">
         <editor content={ opts.data.content } on-update={ opts.onUpdateContent } />
       </div>
     </yield>

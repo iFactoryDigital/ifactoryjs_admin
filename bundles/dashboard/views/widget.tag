@@ -11,7 +11,7 @@
         <div class="col-4 d-flex align-items-center">
           <div class="w-100">
             <button class="btn btn-sm btn-primary float-right" onclick={ onRefresh }>
-              <i class={ 'fa fa-sync' : true, 'fa-spin' : this.refreshing } />
+              <i class={ 'fa fa-sync' : true, 'fa-spin' : this.refreshing || opts.widget.refreshing } />
             </button>
           </div>
         </div>
@@ -41,7 +41,7 @@
       this.update();
 
       // run opts
-      if (opts.onRefresh) await opts.onRefresh(e, opts.widget);
+      if (opts.onRefresh) await opts.onRefresh(opts.widget, opts.data);
       
       // set refreshing
       this.refreshing = false;

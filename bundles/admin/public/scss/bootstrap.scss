@@ -171,6 +171,19 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
     }
   }
 
+  .widget-notes {
+
+    .editor {
+      margin : -1px;
+      height : 100%;
+
+      .ql-container.ql-snow,
+      .ql-toolbar.ql-snow {
+        border : 0;
+      }
+    }
+  }
+
   // make navbar width
   .eden-admin-main,
   .eden-admin-nav {

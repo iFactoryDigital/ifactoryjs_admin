@@ -155,8 +155,40 @@
      * @param  {Event}  e
      * @param  {Object} widget
      */
-    onRefreshWidget (e, widget) {
+    async onRefreshWidget (widget, data) {
+      // set loading
+      widget.refreshing = true;
 
+      // update view
+      this.update();
+
+      // log data
+      let res = await fetch('/dashboard/' + this.dashboard.get('id') + '/widget/save', {
+        'body' : JSON.stringify({
+          'data'   : data,
+          'widget' : widget
+        }),
+        'method'  : 'post',
+        'headers' : {
+          'Content-Type' : 'application/json'
+        },
+        'credentials' : 'same-origin'
+      });
+
+      // load data
+      let result = await res.json();
+
+      // set logic
+      for (let key in result.result) {
+        // clone to dashboard
+        data[key] = result.result[key];
+      }
+
+      // set loading
+      delete widget.refreshing;
+
+      // update view
+      this.update();
     }
 
     /**
