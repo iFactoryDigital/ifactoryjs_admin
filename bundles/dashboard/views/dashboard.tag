@@ -3,29 +3,23 @@
     <div class="dashboard-options mb-5 mt-4">
       <div class="row row-eq-height">
         <div class="col-md-8">
-          <h2 class="m-0">
-            <i if={ !this.dashboard.get('name') && !this.updating.name }>Untitled Dashboard</i>
-            <span if={ !this.updating.name || this.loading.name }>{ this.dashboard.get('name') }</span>
-            <i contenteditable={ this.updating.name } if={ this.updating.name && !this.loading.name } class="d-inline-block px-2" ref="name" onkeyup={ onUpdateName } />
+          <h2 class="m-0" id="dashboard-select">
 
             <!-- update buttons -->
             <a href="#!" onclick={ onShouldUpdateName } if={ !this.updating.name && !this.loading.name }>
-              <small>
-                <i class="fa fa-pencil ml-3 text-primary" />
-              </small>
+              <i class="fa fa-update fa-pencil" />
             </a>
             <a href="#!" onclick={ onCompleteUpdateName } if={ this.updating.name && !this.loading.name }>
-              <small>
-                <i class="fa fa-check ml-3 text-success" />
-              </small>
+              <i class="fa fa-update fa-check bg-success text-white" />
             </a>
             <span if={ this.loading.name }>
-              <small>
-                <i class="fa fa-spinner fa-spin ml-3" />
-              </small>
+              <i class="fa fa-update fa-spinner fa-spin bg-info text-white" />
             </span>
             <!-- / update buttons -->
-
+            
+            <i if={ !this.dashboard.get('name') && !this.updating.name }>Untitled Dashboard</i>
+            <span if={ !this.updating.name || this.loading.name }>{ this.dashboard.get('name') }</span>
+            <i contenteditable={ this.updating.name } if={ this.updating.name && !this.loading.name } class="d-inline-block" ref="name" onkeyup={ onUpdateName }>{ this.dashboard.get('name') }</i>
           </h2>
         </div>
         <div class="col-md-4 text-right d-flex align-items-center">
@@ -54,13 +48,14 @@
     let dashboards = (opts.dashboard || {}).dashboards;
 
     // set update
-    this.rows      = [1, 2, 3, 4, 5, 6, 7, 8];
-    this.type      = opts.type;
-    this.widgets   = [];
-    this.current   = '';
-    this.loading   = {};
-    this.updating  = {};
-    this.dashboard = dashboards && dashboards.length ? this.model('dashboard', dashboards[0]) : this.model('dashboard', {});
+    this.rows       = [1, 2, 3, 4, 5, 6, 7, 8];
+    this.type       = opts.type;
+    this.widgets    = [];
+    this.current    = '';
+    this.loading    = {};
+    this.updating   = {};
+    this.dashboard  = dashboards && dashboards.length ? this.model('dashboard', dashboards[0]) : this.model('dashboard', {});
+    this.showSelect = false;
 
     /**
      * gets widgets

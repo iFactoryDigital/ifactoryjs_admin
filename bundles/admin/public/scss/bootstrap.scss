@@ -202,4 +202,36 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
       margin-bottom : ($spacer / 2);
     }
   }
+
+  // alter dashboard options
+  .dashboard-options h2,
+  .card-header {
+
+    line-height : $h2-font-size;
+
+    // alter edit
+    i.fa.fa-update {
+      color          : $eden-admin-primary;
+      width          : $h2-font-size;
+      height         : $h2-font-size;
+      font-size      : $font-size-base;
+      text-align     : center;
+      background     : $gray-300;
+      line-height    : $h2-font-size;
+      margin-right   : ($spacer / 2);
+      border-radius  : 50%;
+      vertical-align : top;
+
+      &:hover {
+        color      : $eden-admin-aside-hover-color!important;
+        background : $eden-admin-primary;
+      }
+    }
+
+    i.fa.fa-caret {
+      font-size   : $font-size-base;
+      line-height : $h2-font-size;
+      margin-left : ($spacer / 2);
+    }
+  }
 }
