@@ -32,7 +32,7 @@ class DashboardController extends Controller {
 
     // register simple widget
     DashboardHelper.widget('dashboard.notes', {
-      'title'       : 'Notes Widget',
+      'title'       : 'Notes Area',
       'description' : 'Lets you add notes to a widget'
     }, async (req, widget) => {
       // get notes widget from db

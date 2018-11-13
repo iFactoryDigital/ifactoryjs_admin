@@ -12,7 +12,7 @@
         </div>
         <div class="modal-body">
           <ul class="list-group">
-            <li each={ widget, i in opts.widgets || [] } class={ 'list-group-item list-group-item-action flex-column align-items-start' : true, 'active' : isActive(widget) } onclick={ onWidget }>
+            <li each={ widget, i in getWidgets() || [] } class={ 'list-group-item list-group-item-action flex-column align-items-start' : true, 'active' : isActive(widget) } onclick={ onWidget }>
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">
                   { widget.opts.title }
@@ -33,6 +33,19 @@
   </div>
   
   <script>
+  
+    /**
+     * gets widgets
+     *
+     * @return {*}
+     */
+    getWidgets () {
+      // return sorted widgets
+      return opts.widgets.sort((a, b) => {
+        // Return sort
+        return ('' + a.opts.title).localeCompare(b.opts.title);
+      });
+    }
     
     /**
      * on widget

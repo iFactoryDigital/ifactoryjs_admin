@@ -1,6 +1,6 @@
 <dashboard>
   <div class="dashboard">
-    <div class="dashboard-options my-4">
+    <div class="dashboard-options mb-5 mt-4">
       <div class="row row-eq-height">
         <div class="col-md-8">
           <h2 class="m-0">
