@@ -38,10 +38,11 @@ class DashboardHelper extends Helper {
    * @param  {String}   type
    * @param  {Object}   opts
    * @param  {Function} render
+   * @param  {Function} save
    *
    * @return {*}
    */
-  widget (type, opts, render) {
+  widget (type, opts, render, save) {
     // check found
     let found = this.__widgets.find((widget) => widget.type === type);
 
@@ -51,14 +52,26 @@ class DashboardHelper extends Helper {
       this.__widgets.push({
         'type'   : type,
         'opts'   : opts,
+        'save'   : save,
         'render' : render
       });
     } else {
       // set on found
       found.type   = type;
       found.opts   = opts;
+      found.save   = save;
       found.render = render;
     }
+  }
+
+  /**
+   * gets widgets
+   *
+   * @return {Array}
+   */
+  widgets () {
+    // returns widgets
+    return this.__widgets;
   }
 
   /**

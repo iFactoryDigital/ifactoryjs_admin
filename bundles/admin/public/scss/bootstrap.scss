@@ -157,6 +157,20 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
     }
   }
 
+  // is dragging
+  .widget-placements.is-dragging {
+
+    > .row {
+      border  : ($spacer / 8) dashed $gray-400;
+      margin  : 0;
+      padding : $spacer;
+
+      > .col {
+        margin : 0;
+      }
+    }
+  }
+
   // make navbar width
   .eden-admin-main,
   .eden-admin-nav {

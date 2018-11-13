@@ -1,6 +1,6 @@
 <dashboard>
   <div class="dashboard">
-    <div class="dashboard-options">
+    <div class="dashboard-options mb-4">
       <div class="row row-eq-height">
         <div class="col-md-8">
           <h2 class="m-0">
@@ -37,17 +37,10 @@
         </div>
       </div>
     </div>
-    <div ref="dashboard">
-      <div class="row" />
-      <div class="row" />
-      <div class="row" />
-      <div class="row" />
-      <div class="row" />
-      <div class="row" />
-      <div class="row" />
-      <div class="row" />
-      <div class="row" />
-      <div class="row" />
+    <div ref="dashboard" class="widget-placements">
+      <div each={ row, x in this.rows } data-row={ x } class="row mb-3 row-eq-height">
+        <div each={ widget, i in getWidgets(x) } data-widget={ widget.uuid } if={ getWidgetData(widget) } class="col" data-is="widget-{ getWidgetData(widget).tag }" data={ getWidgetData(widget) } widget={ widget } on-save={ this.onSaveWidget } on-refresh={ this.onRefreshWidget } />
+      </div>
     </div>
   </div>
 
@@ -61,10 +54,110 @@
     let dashboards = (opts.dashboard || {}).dashboards;
 
     // set update
+    this.rows      = [1, 2, 3, 4, 5, 6, 7, 8];
+    this.widgets   = [];
     this.current   = '';
     this.loading   = {};
     this.updating  = {};
     this.dashboard = dashboards && dashboards.length ? this.model('dashboard', dashboards[0]) : this.model('dashboard', {});
+
+    /**
+     * gets widgets
+     *
+     * @param  {Integer} i
+     *
+     * @return {*}
+     */
+    getWidgets (i) {
+      // check widgets
+      if (!this.dashboard.get('widgets')) return [];
+      if (!this.dashboard.get('placements')) return [];
+
+      // check widgets
+      let row = [];
+
+      // get placements
+      let widgets = this.dashboard.get('placements')[i];
+
+      // check widgets
+      if (!widgets) return [];
+
+      // return widgets
+      return widgets.map((widget) => {
+        // return found
+        return this.dashboard.get('widgets').find((w) => w.uuid === widget);
+      }).filter((item) => item);
+    }
+
+    /**
+     * get widget data
+     *
+     * @param  {Object} widget
+     *
+     * @return {*}
+     */
+    getWidgetData (widget) {
+      // get found
+      let found = this.widgets.find((w) => w.uuid === widget.uuid);
+
+      // gets data for widget
+      if (!found) return null;
+
+      // return found
+      return found;
+    }
+
+    /**
+     * on refresh widget
+     *
+     * @param  {Event}  e
+     * @param  {Object} widget
+     */
+    async onSaveWidget (widget, data) {
+      // set loading
+      widget.saving = true;
+
+      // update view
+      this.update();
+
+      // log data
+      let res = await fetch('/dashboard/' + this.dashboard.get('id') + '/widget/save', {
+        'body' : JSON.stringify({
+          'data'   : data,
+          'widget' : widget
+        }),
+        'method'  : 'post',
+        'headers' : {
+          'Content-Type' : 'application/json'
+        },
+        'credentials' : 'same-origin'
+      });
+
+      // load data
+      let result = await res.json();
+
+      // set logic
+      for (let key in result.result) {
+        // clone to dashboard
+        data[key] = result.result[key];
+      }
+
+      // set loading
+      delete widget.saving;
+
+      // update view
+      this.update();
+    }
+
+    /**
+     * on refresh widget
+     *
+     * @param  {Event}  e
+     * @param  {Object} widget
+     */
+    onRefreshWidget (e, widget) {
+
+    }
 
     /**
      * on update name
@@ -173,6 +266,7 @@
 
       // save dashboard
       await this.saveDashboard(this.dashboard);
+      await this.loadWidgets(this.dashboard);
     }
 
     /**
@@ -208,11 +302,104 @@
       // set logic
       for (let key in data.result) {
         // clone to dashboard
-        dashboard.set(key, data[key]);
+        dashboard.set(key, data.result[key]);
       }
 
       // set loading
       this.loading.save = false;
+
+      // update view
+      this.update();
+    }
+
+    /**
+     * saves placements
+     *
+     * @return {Promise}
+     */
+    async savePlacements () {
+      // set placements
+      let placements = [];
+
+      // each row
+      jQuery('> .row', this.refs.dashboard).each((i, item) => {
+        // get row
+        let row = [];
+
+        // get each item in row
+        jQuery('[data-widget]', item).each((x, widget) => {
+          // push to row
+          row.push(jQuery(widget).attr('data-widget'));
+        });
+
+        // push row to placements
+        placements.push(row);
+      });
+
+      // set loading
+      this.placing = true;
+      this.loading.placements = true;
+
+      // update view
+      this.update();
+
+      // filter widgets
+      this.dashboard.set('widgets', this.dashboard.get('widgets').filter((widget) => {
+        // check found in row
+        return placements.find((row) => {
+          // return id === widget id
+          return row.find((id) => id === widget.uuid);
+        })
+      }));
+
+      // set placements
+      this.dashboard.set('placements', placements);
+
+      // save
+      await this.saveDashboard(this.dashboard);
+
+      // set loading
+      this.placing = false;
+      this.loading.placements = false;
+
+      // update view
+      this.update();
+    }
+
+    /**
+     * loads dashboard widgets
+     *
+     * @param  {Model} dashboard
+     *
+     * @return {Promise}
+     */
+    async loadWidgets (dashboard) {
+      // set loading
+      this.loading.widgets = true;
+
+      // update view
+      this.update();
+
+      // check type
+      if (!dashboard.type) dashboard.set('type', opts.type);
+
+      // log data
+      let res = await fetch('/dashboard/' + this.dashboard.get('id') + '/view', {
+        'method'  : 'get',
+        'headers' : {
+          'Content-Type' : 'application/json'
+        },
+        'credentials' : 'same-origin'
+      });
+
+      // load data
+      let data = await res.json();
+
+      // set widgets
+      this.widgets = data.result;
+
+      // set loading
+      this.loading.widgets = false;
 
       // update view
       this.update();
@@ -231,7 +418,19 @@
       const dragula = require('dragula');
 
       // do dragula
-      if (!this.dragula) this.dragula = dragula(jQuery('.row', this.refs.dashboard).toArray());
+      if (!this.dragula) this.dragula = dragula(jQuery('.row', this.refs.dashboard).toArray()).on('drop', (el, target, source, sibling) => {
+        // save order
+        this.savePlacements();
+      }).on('drag', () => {
+        // add is dragging
+        jQuery(this.refs.dashboard).addClass('is-dragging');
+      }).on('dragend', () => {
+        // remove is dragging
+        jQuery(this.refs.dashboard).removeClass('is-dragging');
+      });
+
+      // check id
+      if (this.dashboard.get('id')) this.loadWidgets(this.dashboard);
     });
   </script>
 </dashboard>
