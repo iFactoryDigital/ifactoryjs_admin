@@ -22,11 +22,10 @@ class Dashboard extends Model {
   async sanitise () {
     // return dashboard
     return {
-      'id'         : this.get('_id') ? this.get('_id').toString() : null,
-      'type'       : this.get('type'),
-      'name'       : this.get('name'),
-      'widgets'    : this.get('widgets')    || [],
-      'placements' : this.get('placements') || []
+      'id'        : this.get('_id') ? this.get('_id').toString() : null,
+      'type'      : this.get('type'),
+      'name'      : this.get('name'),
+      'placement' : await this.get('placement') ? await (await this.get('placement')).sanitise() : null
     };
   }
 }

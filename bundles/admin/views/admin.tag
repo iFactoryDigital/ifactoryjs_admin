@@ -3,7 +3,7 @@
     <h1 class="jumbotron-heading">{ opts.jumbotron }</h1>
   </section>
   
-  <div data-is="dashboard" dashboard={ opts.dashboard } class="container-fluid container-dashboard" type={ opts.type || 'admin.home' } name={ opts.name || 'Admin Home' } />
+  <div data-is="dashboard" dashboards={ opts.dashboards } blocks={ opts.blocks } class="container-fluid container-dashboard" type={ opts.type || 'admin.home' } name={ opts.name || 'Admin Home' } />
   
   <script>
     // do mixins

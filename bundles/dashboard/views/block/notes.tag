@@ -1,5 +1,5 @@
-<widget-grid>
-  <widget on-refresh={ opts.onRefresh } on-remove={ opts.onRemove } widget={ opts.widget } data={ opts.data } on-update-title={ onUpdateTitle } on-complete-update-title={ onCompleteUpdateTitle } on-should-update-title={ onShouldUpdateTitle } on-grid-state={ onGridState } on-update-content={ onUpdateContent } ref="widget" class="widget-notes">
+<block-notes>
+  <block on-refresh={ opts.onRefresh } on-remove={ opts.onRemove } block={ opts.block } data={ opts.data } on-update-title={ onUpdateTitle } on-complete-update-title={ onCompleteUpdateTitle } on-should-update-title={ onShouldUpdateTitle } on-update-content={ onUpdateContent } ref="block" class="block-notes">
     <yield to="header">
       
       <!-- update buttons -->
@@ -14,32 +14,19 @@
       </span>
       <!-- / update buttons -->
 
-      <i if={ !opts.data.title && !this.updating.title }>Untitled { opts.data.name }</i>
+      <i if={ !opts.data.title && !this.updating.title }>Untitled Notes</i>
       <span if={ !this.updating.title || this.loading.title }>{ opts.data.title }</span>
       <i contenteditable={ this.updating.title } if={ this.updating.title && !this.loading.title } class="d-inline-block px-2" ref="name" onkeyup={ opts.onUpdateTitle }>{ opts.data.title }</i>
 
     </yield>
     <yield to="body">
-      <div class="card-body">
-        <grid ref="grid" grid={ opts.data.grid } table-class="table table-bordered table-striped" title={ opts.data.title || opts.widget.title } on-state={ opts.onGridState } />
+      <div class="card-body p-0">
+        <editor content={ opts.data.content } on-update={ opts.onUpdateContent } />
       </div>
     </yield>
-  </widget>
+  </block>
 
   <script>
-  
-    /**
-     * on grid state
-     *
-     * @param  {Object} state
-     */
-    async onGridState (state) {
-      // set name
-      opts.data.state = state;
-
-      // do update
-      await opts.onSave(opts.widget, opts.data, true);
-    }
 
     /**
      * on update name
@@ -71,23 +58,36 @@
       e.stopPropagation();
 
       // set update
-      this.refs.widget.loading.title = true;
-      this.refs.widget.updating.title = false;
+      this.refs.block.loading.title = true;
+      this.refs.block.updating.title = false;
 
       // set name
       opts.data.title = jQuery('[ref="name"]', this.root).text();
 
       // update
-      this.refs.widget.update();
+      this.refs.block.update();
 
       // do update
-      await opts.onSave(opts.widget, opts.data);
+      await opts.onSave(opts.block, opts.data);
 
       // set loading
-      this.refs.widget.loading.title = false;
+      this.refs.block.loading.title = false;
 
       // update
-      this.refs.widget.update();
+      this.refs.block.update();
+    }
+
+    /**
+     * on update name
+     *
+     * @param  {Event} e
+     */
+    async onUpdateContent (content) {
+      // set name
+      opts.data.content = content;
+
+      // do update
+      await opts.onSave(opts.block, opts.data);
     }
 
     /**
@@ -101,14 +101,14 @@
       e.stopPropagation();
 
       // set update
-      this.refs.widget.updating.title = !this.refs.widget.updating.title;
+      this.refs.block.updating.title = !this.refs.block.updating.title;
 
       // update
-      this.refs.widget.update();
+      this.refs.block.update();
 
       // set inner test
       jQuery('[ref="name"]', this.root).focus();
     }
 
   </script>
-</widget-grid>
+</block-notes>

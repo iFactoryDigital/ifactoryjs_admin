@@ -156,21 +156,7 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
     }
   }
 
-  // is dragging
-  .widget-placements.is-dragging {
-
-    > .row {
-      border  : ($spacer / 8) dashed $gray-400;
-      margin  : 0;
-      padding : $spacer;
-
-      > .col {
-        margin : 0;
-      }
-    }
-  }
-
-  .widget-notes {
+  .block-notes {
 
     .editor {
       margin : -1px;
@@ -204,8 +190,7 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
   }
 
   // alter dashboard options
-  .dashboard-options h2,
-  .card-header {
+  .dashboard-options h2 {
 
     line-height : $h2-font-size;
 

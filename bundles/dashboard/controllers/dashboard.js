@@ -5,12 +5,13 @@ const socket     = require('socket');
 const Controller = require('controller');
 
 // require models
-const Widget    = model('widget');
+const Block     = model('block');
 const Dashboard = model('dashboard');
+const Placement = model('placement');
 
 // require helpers
-const ModelHelper     = helper('model');
-const DashboardHelper = helper('dashboard');
+const ModelHelper = helper('model');
+const BlockHelper = helper('cms/block');
 
 /**
  * build dashboard controller
@@ -30,40 +31,40 @@ class DashboardController extends Controller {
     this.updateAction = this.updateAction.bind(this);
     this.removeAction = this.removeAction.bind(this);
 
-    // register simple widget
-    DashboardHelper.widget('dashboard.notes', {
+    // register simple block
+    BlockHelper.block('dashboard.notes', {
       'title'       : 'Notes Area',
-      'description' : 'Lets you add notes to a widget'
-    }, async (req, widget) => {
-      // get notes widget from db
-      let widgetModel = await Widget.findOne({
-        'uuid' : widget.uuid
-      }) || new Widget({
-        'uuid' : widget.uuid,
-        'type' : widget.type
+      'description' : 'Lets you add notes to a block'
+    }, async (req, block) => {
+      // get notes block from db
+      let blockModel = await Block.findOne({
+        'uuid' : block.uuid
+      }) || new Block({
+        'uuid' : block.uuid,
+        'type' : block.type
       });
 
       // return
       return {
         'tag'     : 'notes',
-        'title'   : widgetModel.get('title') || '',
-        'content' : widgetModel.get('content') || ''
+        'title'   : blockModel.get('title') || '',
+        'content' : blockModel.get('content') || ''
       };
-    }, async (req, widget) => {
-      // get notes widget from db
-      let widgetModel = await Widget.findOne({
-        'uuid' : widget.uuid
-      }) || new Widget({
-        'uuid' : widget.uuid,
-        'type' : widget.type
+    }, async (req, block) => {
+      // get notes block from db
+      let blockModel = await Block.findOne({
+        'uuid' : block.uuid
+      }) || new Block({
+        'uuid' : block.uuid,
+        'type' : block.type
       });
 
       // set data
-      widgetModel.set('title',   req.body.data.title);
-      widgetModel.set('content', req.body.data.content);
+      blockModel.set('title',   req.body.data.title);
+      blockModel.set('content', req.body.data.content);
 
-      // save widget
-      await widgetModel.save();
+      // save block
+      await blockModel.save();
     });
   }
 
@@ -122,97 +123,9 @@ class DashboardController extends Controller {
 
     // return JSON
     res.json({
-      'state'  : 'success',
-      'result' : (await Promise.all((dashboard.get('widgets') || []).map(async (widget) => {
-        // get from register
-        let registered = DashboardHelper.widgets().find((w) => w.type === widget.type);
-
-        // check registered
-        if (!registered) return null;
-
-        // get data
-        let data = await registered.render(req, widget);
-
-        // set uuid
-        data.uuid = widget.uuid;
-
-        // return render
-        return data;
-      }))).filter((w) => w),
-      'message' : 'Successfully got widgets'
-    });
-  }
-
-  /**
-   * save widget action
-   *
-   * @route    {post} /:id/widget/save
-   * @layout   admin
-   * @priority 12
-   */
-  async saveWidgetAction (req, res) {
-    // set website variable
-    let create    = true;
-    let dashboard = new Dashboard();
-
-    // check for website model
-    if (req.params.id) {
-      // load by id
-      create    = false;
-      dashboard = await Dashboard.findById(req.params.id);
-    }
-
-    // get widget
-    let widgets = dashboard.get('widgets') || [];
-    let current = widgets.find((widget) => widget.uuid === req.body.widget.uuid);
-
-    // update
-    let registered = DashboardHelper.widgets().find((w) => w.type === current.type);
-
-    // await save
-    await registered.save(req, current);
-
-    // get rendered
-    let rendered = await registered.render(req, current);
-
-    // set uuid
-    rendered.uuid = req.body.widget.uuid;
-
-    // emit
-    socket.room('dashboard.' + dashboard.get('_id').toString(), 'dashboard.' + dashboard.get('_id').toString() + '.widget', rendered);
-
-    // return JSON
-    res.json({
       'state'   : 'success',
-      'result'  : rendered,
-      'message' : 'Successfully saved widget'
-    });
-  }
-
-  /**
-   * remove widget action
-   *
-   * @route    {post} /:id/widget/remove
-   * @layout   admin
-   * @priority 12
-   */
-  async removeWidgetAction (req, res) {
-    // get notes widget from db
-    let widgetModel = await Widget.findOne({
-      'uuid' : req.body.widget.uuid
-    }) || new Widget({
-      'uuid' : req.body.widget.uuid,
-      'type' : req.body.widget.type
-    });
-
-    // remove widget
-    if (widgetModel.get('_id')) await widgetModel.remove();
-
-    // return JSON
-    res.json({
-      'state'   : 'success',
-      'result'  : null,
-      'message' : 'Successfully removed widget'
+      'result'  : await dashboard.sanitise(),
+      'message' : 'Successfully got blocks'
     });
   }
 
@@ -249,11 +162,12 @@ class DashboardController extends Controller {
     }
 
     // update dashboard
-    dashboard.set('user',       req.user);
-    dashboard.set('type',       req.body.type);
-    dashboard.set('name',       req.body.name);
-    dashboard.set('widgets',    req.body.widgets);
-    dashboard.set('placements', req.body.placements);
+    dashboard.set('user', req.user);
+    dashboard.set('type', req.body.type);
+    dashboard.set('name', req.body.name);
+
+    // check placement
+    if (req.body.placement) dashboard.set('placement', await Placement.findById(req.body.placement.id));
 
     // save dashboard
     await dashboard.save();
