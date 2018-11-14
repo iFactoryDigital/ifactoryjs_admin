@@ -33,6 +33,8 @@ class DashboardController extends Controller {
 
     // register simple block
     BlockHelper.block('dashboard.notes', {
+      'acl'         : ['admin.notes'],
+      'for'         : ['admin'],
       'title'       : 'Notes Area',
       'description' : 'Lets you add notes to a block'
     }, async (req, block) => {
@@ -47,6 +49,7 @@ class DashboardController extends Controller {
       // return
       return {
         'tag'     : 'notes',
+        'class'   : blockModel.get('class') || null,
         'title'   : blockModel.get('title') || '',
         'content' : blockModel.get('content') || ''
       };
@@ -60,6 +63,7 @@ class DashboardController extends Controller {
       });
 
       // set data
+      blockModel.set('class',   req.body.data.class);
       blockModel.set('title',   req.body.data.title);
       blockModel.set('content', req.body.data.content);
 
