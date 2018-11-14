@@ -19,13 +19,13 @@ class Dashboard extends Model {
    *
    * @return {Promise}
    */
-  async sanitise () {
+  async sanitise (req) {
     // return dashboard
     return {
       'id'        : this.get('_id') ? this.get('_id').toString() : null,
       'type'      : this.get('type'),
       'name'      : this.get('name'),
-      'placement' : await this.get('placement') ? await (await this.get('placement')).sanitise() : null
+      'placement' : await this.get('placement') ? await (await this.get('placement')).sanitise(req) : null
     };
   }
 }

@@ -56,9 +56,9 @@ class AdminController extends Controller {
     res.render('admin', {
       'name'       : 'Admin Home',
       'type'       : 'admin.home',
-      'blocks'     : BlockHelper.renderBlocks(),
+      'blocks'     : BlockHelper.renderBlocks('admin'),
       'jumbotron'  : 'Welcome back, ' + req.user.get('username') + '!',
-      'dashboards' : await Promise.all(dashboards.map(async (dashboard) => dashboard.sanitise()))
+      'dashboards' : await Promise.all(dashboards.map(async (dashboard, i) => dashboard.sanitise(i === 0 ? req : null)))
     });
   }
 

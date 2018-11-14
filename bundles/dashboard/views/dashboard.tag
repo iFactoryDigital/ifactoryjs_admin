@@ -42,10 +42,7 @@
     let dashboards = opts.dashboards || [];
 
     // set update
-    this.rows       = [1, 2, 3, 4, 5, 6, 7, 8];
     this.type       = opts.type;
-    this.widgets    = [];
-    this.current    = '';
     this.loading    = {};
     this.updating   = {};
     this.dashboard  = dashboards && dashboards.length ? this.model('dashboard', dashboards[0]) : this.model('dashboard', {});
@@ -187,6 +184,15 @@
     this.on('update', () => {
       // check frontend
       if (!this.eden.frontend) return;
+
+      // check type
+      if (opts.type !== this.type) {
+        // set type
+        this.type = opts.type;
+
+        // trigger mount
+        this.trigger('mount');
+      }
       
     });
 
