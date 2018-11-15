@@ -166,9 +166,10 @@ class DashboardController extends Controller {
     }
 
     // update dashboard
-    dashboard.set('user', req.user);
-    dashboard.set('type', req.body.type);
-    dashboard.set('name', req.body.name);
+    dashboard.set('user',   req.user);
+    dashboard.set('type',   req.body.type);
+    dashboard.set('name',   req.body.name);
+    dashboard.set('public', !!req.body.public);
 
     // check placement
     if (req.body.placement) dashboard.set('placement', await Placement.findById(req.body.placement.id));

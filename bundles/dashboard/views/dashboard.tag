@@ -16,22 +16,44 @@
               <i class="fa fa-update fa-spinner fa-spin bg-info text-white" />
             </span>
             <!-- / update buttons -->
-            
+
             <i if={ !this.dashboard.get('name') && !this.updating.name }>Untitled Dashboard</i>
             <span if={ !this.updating.name || this.loading.name }>{ this.dashboard.get('name') }</span>
             <i contenteditable={ this.updating.name } if={ this.updating.name && !this.loading.name } class="d-inline-block" ref="name" onkeyup={ onUpdateName }>{ this.dashboard.get('name') }</i>
+
+            <div class="dropdown d-inline-block">
+              <a href="#!" class="ml-3" id="select-dashboard" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-chevron-down" />
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="select-dashboard">
+                <a href="#!" each={ dash, i in opts.dashboards || [] } class={ 'dropdown-item' : true, 'active' : dashboard.get('id') === dash.id } onclick={ onDashboard }>
+                  <i if={ !(dash.name).length }>Untitled Dashboard</i>
+                  { dash.name }
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#!" class="dropdown-item" onclick={ onAddDashboard }>
+                  Create new Dashboard
+                </a>
+              </div>
+            </div>
           </h2>
         </div>
         <div class="col-md-4 text-right d-flex align-items-center">
           <div class="w-100">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#block-modal">
+            <button class="btn btn-{ this.dashboard.get('public') ? 'success' : 'info' } mr-3" onclick={ onTogglePublic }>
+              { this.dashboard.get('public') ? 'Public' : 'Private' }
+            </button>
+            <button class="btn btn-{ this.isUpdate ? 'info' : 'success' } mr-3" onclick={ onToggleUpdate }>
+              { this.isUpdate ? 'Preview' : 'Update' }
+            </button>
+            <button if={ this.isUpdate } class="btn btn-primary" data-toggle="modal" data-target="#block-modal">
               Add Block
             </button>
           </div>
         </div>
       </div>
     </div>
-    <editor-update placement={ this.dashboard.get('placement') || {} } for="dashboard" blocks={ opts.blocks } type={ opts.type } on-save={ onPlacement } />
+    <div data-is="editor-{ this.isUpdate ? 'update' : 'view' }" placement={ this.dashboard.get('placement') || {} } for="dashboard" blocks={ opts.blocks } type={ opts.type } on-save={ onPlacement } />
   </div>
 
   <script>
@@ -39,14 +61,55 @@
     this.mixin('model');
 
     // set dashboards
-    let dashboards = opts.dashboards || [];
+    this.dashboards = (opts.dashboards || []).map((dash) => this.model('dashboard', dash));
 
     // set update
     this.type       = opts.type;
     this.loading    = {};
+    this.isUpdate   = true;
     this.updating   = {};
-    this.dashboard  = dashboards && dashboards.length ? this.model('dashboard', dashboards[0]) : this.model('dashboard', {});
+    this.dashboard  = this.dashboards.length ? this.dashboards[0] : this.model('dashboard', {});
     this.showSelect = false;
+
+    /**
+     * on add dashboard
+     *
+     * @param  {Event}  e
+     */
+    async onAddDashboard (e) {
+      // prevent default
+      e.preventDefault();
+      e.stopPropagation();
+
+      // set dashboard
+      this.dashboard = this.model('dashboard', {});
+
+      // save dashboard
+      await this.saveDashboard(this.dashboard);
+
+      // get dashboard
+      this.dashboards.push(this.dashboard);
+
+      // save
+      this.update();
+    }
+
+    /**
+     * on add dashboard
+     *
+     * @param  {Event}  e
+     */
+    async onDashboard (e) {
+      // prevent default
+      e.preventDefault();
+      e.stopPropagation();
+
+      // set dashboard
+      this.dashboard = this.model('dashboard', e.item.dash);
+
+      // save
+      this.update();
+    }
 
     /**
      * on update name
@@ -66,7 +129,7 @@
       // set update
       this.dashboard.set('name', jQuery(e.target).text());
     }
-    
+
     /**
      * set placement
      *
@@ -77,10 +140,60 @@
       if (placement.get('id') !== (this.dashboard.get('placement') || {}).id) {
         // update placement
         this.dashboard.set('placement', placement.get());
-        
+
         // save
         await this.saveDashboard(this.dashboard);
       }
+    }
+    
+    /**
+     * on toggle public
+     *
+     * @param  {Event}  e
+     *
+     * @return {Promise}
+     */
+    onToggleUpdate (e) {
+      // prevent default
+      e.preventDefault();
+      e.stopPropagation();
+
+      // set update
+      this.isUpdate = !this.isUpdate;
+      
+      // update view
+      this.update();
+    }
+
+    /**
+     * on toggle public
+     *
+     * @param  {Event}  e
+     *
+     * @return {Promise}
+     */
+    async onTogglePublic (e) {
+      // prevent default
+      e.preventDefault();
+      e.stopPropagation();
+
+      // set update
+      this.loading.public = true;
+
+      // set name
+      this.dashboard.set('public', !this.dashboard.get('public'));
+
+      // update
+      this.update();
+
+      // do update
+      await this.saveDashboard(this.dashboard);
+
+      // set loading
+      this.loading.public = false;
+
+      // update
+      this.update();
     }
 
     /**
@@ -175,7 +288,7 @@
       // update view
       this.update();
     }
-    
+
     /**
      * on update
      *
@@ -193,7 +306,7 @@
         // trigger mount
         this.trigger('mount');
       }
-      
+
     });
 
     /**
@@ -204,13 +317,13 @@
     this.on('mount', () => {
       // check frontend
       if (!this.eden.frontend) return;
-  
+
       // set dashboards
-      let dashboards = opts.dashboards || [];
-      
+      this.dashboards = (opts.dashboards || []).map((dash) => this.model('dashboard', dash));
+
       // set dashboard
-      this.dashboard = dashboards && dashboards.length ? this.model('dashboard', dashboards[0]) : this.model('dashboard', {});
-        
+      this.dashboard = this.dashboard && this.dashboard.get('type') === opts.type ? this.dashboard : (this.dashboards.length ? this.dashboards[0] : this.model('dashboard', {}));
+
     });
   </script>
 </dashboard>

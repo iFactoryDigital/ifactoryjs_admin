@@ -8,7 +8,7 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <a class="navbar-brand d-md-block text-center" href="/">
-            <i class="fa fa-admin" />
+            <i class="fa fa-home" />
           </a>
         </div>
         <main class="eden-admin-nav">
