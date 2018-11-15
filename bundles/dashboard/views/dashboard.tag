@@ -53,7 +53,7 @@
         </div>
       </div>
     </div>
-    <div data-is="editor-{ this.isUpdate ? 'update' : 'view' }" placement={ this.dashboard.get('placement') || {} } for="dashboard" blocks={ opts.blocks } type={ opts.type } on-save={ onPlacement } />
+    <div data-is="eden-{ this.isUpdate ? 'update' : 'view' }" placement={ this.dashboard.get('placement') || {} } for="dashboard" blocks={ opts.blocks } type={ opts.type } on-save={ onPlacement } />
   </div>
 
   <script>
