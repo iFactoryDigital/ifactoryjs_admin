@@ -66,7 +66,7 @@
     // set update
     this.type       = opts.type;
     this.loading    = {};
-    this.isUpdate   = true;
+    this.isUpdate   = false;
     this.updating   = {};
     this.dashboard  = this.dashboards.length ? this.dashboards[0] : this.model('dashboard', {});
     this.showSelect = false;
