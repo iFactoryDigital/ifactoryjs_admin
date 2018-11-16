@@ -40,7 +40,7 @@
         </div>
         <div class="col-md-4 text-right d-flex align-items-center">
           <div class="w-100">
-            <button class="btn btn-{ this.dashboard.get('public') ? 'success' : 'info' } mr-3" onclick={ onTogglePublic }>
+            <button class="btn btn-{ this.dashboard.get('public') ? 'success' : 'info' } mr-3" if={ this.isUpdate } onclick={ onTogglePublic }>
               { this.dashboard.get('public') ? 'Public' : 'Private' }
             </button>
             <button class="btn btn-{ this.isUpdate ? 'info' : 'success' } mr-3" onclick={ onToggleUpdate }>
