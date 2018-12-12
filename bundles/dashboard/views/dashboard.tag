@@ -40,20 +40,17 @@
         </div>
         <div class="col-md-4 text-right d-flex align-items-center">
           <div class="w-100">
-            <button class="btn btn-{ this.dashboard.get('public') ? 'success' : 'info' } mr-3" if={ this.isUpdate } onclick={ onTogglePublic }>
+            <button class="btn btn-{ this.dashboard.get('public') ? 'success' : 'info' } mr-3" onclick={ onTogglePublic }>
               { this.dashboard.get('public') ? 'Public' : 'Private' }
             </button>
-            <button class="btn btn-{ this.isUpdate ? 'info' : 'success' } mr-3" onclick={ onToggleUpdate }>
-              { this.isUpdate ? 'Preview' : 'Update' }
-            </button>
-            <button if={ this.isUpdate } class="btn btn-primary" data-toggle="modal" data-target="#block-modal">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#block-modal">
               Add Block
             </button>
           </div>
         </div>
       </div>
     </div>
-    <div data-is="eden-{ this.isUpdate ? 'update' : 'view' }" placement={ this.dashboard.get('placement') || {} } for="dashboard" blocks={ opts.blocks } type={ opts.type } on-save={ onPlacement } />
+    <div data-is="eden-blocks" placement={ this.dashboard.get('placement') || {} } for="dashboard" blocks={ opts.blocks } type={ opts.type } on-save={ onPlacement } />
   </div>
 
   <script>
@@ -144,25 +141,6 @@
         // save
         await this.saveDashboard(this.dashboard);
       }
-    }
-    
-    /**
-     * on toggle public
-     *
-     * @param  {Event}  e
-     *
-     * @return {Promise}
-     */
-    onToggleUpdate (e) {
-      // prevent default
-      e.preventDefault();
-      e.stopPropagation();
-
-      // set update
-      this.isUpdate = !this.isUpdate;
-      
-      // update view
-      this.update();
     }
 
     /**
