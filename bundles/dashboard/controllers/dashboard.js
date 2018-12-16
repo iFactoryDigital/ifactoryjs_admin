@@ -1,7 +1,5 @@
 
 // require dependencies
-const Grid       = require('grid');
-const socket     = require('socket');
 const Controller = require('controller');
 
 // require models
@@ -22,49 +20,49 @@ class DashboardController extends Controller {
   /**
    * construct user DashboardController controller
    */
-  constructor () {
+  constructor() {
     // run super
     super();
 
     // bind methods
-    this.viewAction   = this.viewAction.bind(this);
+    this.viewAction = this.viewAction.bind(this);
     this.updateAction = this.updateAction.bind(this);
     this.removeAction = this.removeAction.bind(this);
 
     // register simple block
     BlockHelper.block('dashboard.notes', {
-      'acl'         : ['admin.notes'],
-      'for'         : ['admin'],
-      'title'       : 'Notes Area',
-      'description' : 'Lets you add notes to a block'
+      acl         : ['admin.notes'],
+      for         : ['admin'],
+      title       : 'Notes Area',
+      description : 'Lets you add notes to a block',
     }, async (req, block) => {
       // get notes block from db
-      let blockModel = await Block.findOne({
-        'uuid' : block.uuid
+      const blockModel = await Block.findOne({
+        uuid : block.uuid,
       }) || new Block({
-        'uuid' : block.uuid,
-        'type' : block.type
+        uuid : block.uuid,
+        type : block.type,
       });
 
       // return
       return {
-        'tag'     : 'notes',
-        'class'   : blockModel.get('class') || null,
-        'title'   : blockModel.get('title') || '',
-        'content' : blockModel.get('content') || ''
+        tag     : 'notes',
+        class   : blockModel.get('class') || null,
+        title   : blockModel.get('title') || '',
+        content : blockModel.get('content') || '',
       };
     }, async (req, block) => {
       // get notes block from db
-      let blockModel = await Block.findOne({
-        'uuid' : block.uuid
+      const blockModel = await Block.findOne({
+        uuid : block.uuid,
       }) || new Block({
-        'uuid' : block.uuid,
-        'type' : block.type
+        uuid : block.uuid,
+        type : block.type,
       });
 
       // set data
-      blockModel.set('class',   req.body.data.class);
-      blockModel.set('title',   req.body.data.title);
+      blockModel.set('class', req.body.data.class);
+      blockModel.set('title', req.body.data.title);
       blockModel.set('content', req.body.data.content);
 
       // save block
@@ -81,9 +79,9 @@ class DashboardController extends Controller {
    * @call   model.listen.dashboard
    * @return {Async}
    */
-  async listenAction (id, uuid, opts) {
+  async listenAction(id, uuid, opts) {
     // join room
-    opts.socket.join('dashboard.' + id);
+    opts.socket.join(`dashboard.${id}`);
 
     // add to room
     return await ModelHelper.listen(opts.sessionID, await Dashboard.findById(id), uuid);
@@ -98,7 +96,7 @@ class DashboardController extends Controller {
    * @call   model.deafen.dashboard
    * @return {Async}
    */
-  async liveDeafenAction (id, uuid, opts) {
+  async liveDeafenAction(id, uuid, opts) {
     // add to room
     return await ModelHelper.deafen(opts.sessionID, await Dashboard.findById(id), uuid);
   }
@@ -110,26 +108,21 @@ class DashboardController extends Controller {
    * @layout   admin
    * @priority 12
    */
-  async viewAction (req, res) {
+  async viewAction(req, res) {
     // set website variable
-    let create    = true;
     let dashboard = new Dashboard();
 
     // check for website model
     if (req.params.id) {
       // load by id
-      create    = false;
       dashboard = await Dashboard.findById(req.params.id);
     }
 
-    // res JSON
-    let sanitised = await dashboard.sanitise();
-
     // return JSON
     res.json({
-      'state'   : 'success',
-      'result'  : await dashboard.sanitise(),
-      'message' : 'Successfully got blocks'
+      state   : 'success',
+      result  : await dashboard.sanitise(),
+      message : 'Successfully got blocks',
     });
   }
 
@@ -139,7 +132,7 @@ class DashboardController extends Controller {
    * @route  {post} /create
    * @layout admin
    */
-  createAction () {
+  createAction() {
     // return update action
     return this.updateAction(...arguments);
   }
@@ -153,7 +146,7 @@ class DashboardController extends Controller {
    * @route  {post} /:id/update
    * @layout admin
    */
-  async updateAction (req, res) {
+  async updateAction(req, res) {
     // set website variable
     let create    = true;
     let dashboard = new Dashboard();
@@ -161,14 +154,14 @@ class DashboardController extends Controller {
     // check for website model
     if (req.params.id) {
       // load by id
-      create    = false;
+      create = false;
       dashboard = await Dashboard.findById(req.params.id);
     }
 
     // update dashboard
-    dashboard.set('user',   req.user);
-    dashboard.set('type',   req.body.type);
-    dashboard.set('name',   req.body.name);
+    dashboard.set('user', req.user);
+    dashboard.set('type', req.body.type);
+    dashboard.set('name', req.body.name);
     dashboard.set('public', !!req.body.public);
 
     // check placement
@@ -178,13 +171,13 @@ class DashboardController extends Controller {
     await dashboard.save();
 
     // send alert
-    req.alert('success', 'Successfully ' + (create ? 'Created' : 'Updated') + ' dashboard!');
+    req.alert('success', `Successfully ${create ? 'Created' : 'Updated'} dashboard!`);
 
     // return JSON
     res.json({
-      'state'   : 'success',
-      'result'  : await dashboard.sanitise(),
-      'message' : 'Successfully updated dashboard'
+      state   : 'success',
+      result  : await dashboard.sanitise(),
+      message : 'Successfully updated dashboard',
     });
   }
 
@@ -198,7 +191,7 @@ class DashboardController extends Controller {
    * @title   Remove dashboard
    * @layout  admin
    */
-  async removeAction (req, res) {
+  async removeAction(req, res) {
     // set website variable
     let dashboard = false;
 
@@ -209,16 +202,16 @@ class DashboardController extends Controller {
     }
 
     // alert Removed
-    req.alert('success', 'Successfully removed ' + (dashboard.get('_id').toString()));
+    req.alert('success', `Successfully removed ${dashboard.get('_id').toString()}`);
 
     // delete website
     await dashboard.remove();
 
     // return JSON
     res.json({
-      'state'   : 'success',
-      'result'  : null,
-      'message' : 'Successfully removed dashboard'
+      state   : 'success',
+      result  : null,
+      message : 'Successfully removed dashboard',
     });
   }
 }

@@ -43,19 +43,22 @@
             <button class="btn btn-{ this.dashboard.get('public') ? 'success' : 'info' } mr-3" onclick={ onTogglePublic }>
               { this.dashboard.get('public') ? 'Public' : 'Private' }
             </button>
-            <button class="btn btn-primary" data-toggle="modal" data-target="#block-modal">
-              Add Block
+            <button class={ 'btn' : true, 'btn-primary' : !this.isUpdate, 'btn-success' : this.isUpdate } onclick={ onToggleUpdate }>
+              { this.isUpdate ? 'Save' : 'Update' }
             </button>
           </div>
         </div>
       </div>
     </div>
-    <div data-is="eden-blocks" placement={ this.dashboard.get('placement') || {} } for="dashboard" blocks={ opts.blocks } type={ opts.type } on-save={ onPlacement } />
+    <div data-is="eden-blocks" placement={ this.dashboard.get('placement') || {} } for="dashboard" preview={ !this.isUpdate } blocks={ opts.blocks } type={ opts.type } on-save={ onPlacement } positions={ this.positions } />
   </div>
 
   <script>
     // do mixins
     this.mixin('model');
+
+    // require uuid
+    const uuid = require('uuid');
 
     // set dashboards
     this.dashboards = (opts.dashboards || []).map((dash) => this.model('dashboard', dash));
@@ -67,6 +70,35 @@
     this.updating   = {};
     this.dashboard  = this.dashboards.length ? this.dashboards[0] : this.model('dashboard', {});
     this.showSelect = false;
+
+    // set placements
+    this.positions = opts.positions || [
+      {
+        'type'     : 'structure.row',
+        'uuid'     : uuid(),
+        'children' : []
+      },
+      {
+        'type'     : 'structure.row',
+        'uuid'     : uuid(),
+        'children' : []
+      },
+      {
+        'type'     : 'structure.row',
+        'uuid'     : uuid(),
+        'children' : []
+      },
+      {
+        'type'     : 'structure.row',
+        'uuid'     : uuid(),
+        'children' : []
+      },
+      {
+        'type'     : 'structure.row',
+        'uuid'     : uuid(),
+        'children' : []
+      }
+    ];
 
     /**
      * on add dashboard
@@ -222,6 +254,23 @@
 
       // set inner test
       jQuery(this.refs.name).text(this.dashboard.get('name')).focus();
+    }
+
+    /**
+     * on update name
+     *
+     * @param  {Event} e
+     */
+    onToggleUpdate (e) {
+      // prevent default
+      e.preventDefault();
+      e.stopPropagation();
+
+      // set update
+      this.isUpdate = !this.isUpdate;
+
+      // update
+      this.update();
     }
 
     /**

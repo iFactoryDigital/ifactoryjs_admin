@@ -16,11 +16,10 @@ const BlockHelper = helper('cms/block');
  * @mount /admin
  */
 class AdminController extends Controller {
-
   /**
    * Construct Admin Controller class
    */
-  constructor () {
+  constructor() {
     // Run super
     super();
 
@@ -42,26 +41,28 @@ class AdminController extends Controller {
    * @layout   admin
    * @priority 100
    */
-  async indexAction (req, res) {
+  async indexAction(req, res) {
     // get dashboards
-    let dashboards = await Dashboard.where({
-      'type' : 'admin.home'
+    const dashboards = await Dashboard.where({
+      type : 'admin.home',
     }).or({
-      'user.id' : req.user.get('_id').toString()
+      'user.id' : req.user.get('_id').toString(),
     }, {
-      'public' : true
+      public : true,
     }).find();
 
     // Render admin page
     res.render('admin', {
-      'name'       : 'Admin Home',
-      'type'       : 'admin.home',
-      'blocks'     : BlockHelper.renderBlocks('admin'),
-      'jumbotron'  : 'Welcome back, ' + req.user.get('username') + '!',
-      'dashboards' : await Promise.all(dashboards.map(async (dashboard, i) => dashboard.sanitise(i === 0 ? req : null)))
+      name       : 'Admin Home',
+      type       : 'admin.home',
+      blocks     : BlockHelper.renderBlocks('admin'),
+      jumbotron  : `Welcome back, ${req.user.get('username')}!`,
+      dashboards : await Promise.all(dashboards.map(async (dashboard, i) => {
+        // return sanitise promise
+        return dashboard.sanitise(i === 0 ? req : null);
+      })),
     });
   }
-
 }
 
 /**
