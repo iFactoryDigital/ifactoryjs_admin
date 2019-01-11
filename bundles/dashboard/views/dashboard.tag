@@ -50,7 +50,7 @@
         </div>
       </div>
     </div>
-    <div data-is="eden-blocks" placement={ this.dashboard.get('placement') || {} } for="dashboard" preview={ !this.isUpdate } blocks={ opts.blocks } type={ opts.type } on-save={ onPlacement } positions={ this.positions } />
+    <div data-is="eden-blocks" placement={ this.dashboard.get('placement') || {} } position={ this.dashboard.get('id') } for="dashboard" preview={ !this.isUpdate } blocks={ opts.blocks } type={ opts.type } on-save={ onPlacement } positions={ this.positions } />
   </div>
 
   <script>
