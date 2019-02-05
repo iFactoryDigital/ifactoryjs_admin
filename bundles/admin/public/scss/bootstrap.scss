@@ -72,8 +72,10 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
 
       // nav item
       > .nav-item {
+        width    : $eden-admin-aside-width;
         z-index  : 20;
         position : relative;
+        overflow : hidden;
 
         // set nav link
         > .nav-link {
@@ -134,6 +136,8 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
         // active/hover augment
         &.active,
         &:hover {
+          width    : auto;
+          overflow : initial;
 
           // hover nav
           &:hover {
