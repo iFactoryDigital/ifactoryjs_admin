@@ -6,10 +6,10 @@
           <h2 class="m-0" id="dashboard-select">
 
             <!-- update buttons -->
-            <a href="#!" onclick={ onShouldUpdateName } if={ !this.updating.name && !this.loading.name }>
+            <a href="#" onclick={ onShouldUpdateName } if={ !this.updating.name && !this.loading.name }>
               <i class="fa fa-update fa-pencil" />
             </a>
-            <a href="#!" onclick={ onCompleteUpdateName } if={ this.updating.name && !this.loading.name }>
+            <a href="#" onclick={ onCompleteUpdateName } if={ this.updating.name && !this.loading.name }>
               <i class="fa fa-update fa-check bg-success text-white" />
             </a>
             <span if={ this.loading.name }>
@@ -22,12 +22,12 @@
             <i contenteditable={ this.updating.name } if={ this.updating.name && !this.loading.name } class="d-inline-block" ref="name" onkeyup={ onUpdateName }>{ this.dashboard.get('name') }</i>
 
             <div class="dropdown d-inline-block">
-              <a href="#!" class="ml-3" id="select-dashboard" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a href="#" class="ml-3" id="select-dashboard" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-chevron-down" />
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="select-dashboard">
-                <a href="#!" each={ dash, i in opts.dashboards || [] } class={ 'dropdown-item' : true, 'active' : dashboard.get('id') === dash.id } onclick={ onDashboard }>
-                  <i if={ !(dash.name).length }>Untitled Dashboard</i>
+                <a href="#" each={ dash, i in opts.dashboards || [] } class={ 'dropdown-item' : true, 'active' : dashboard.get('id') === dash.id } onclick={ onDashboard }>
+                  <i if={ !(dash.name || '').length }>Untitled Dashboard</i>
                   { dash.name }
                 </a>
                 <div class="dropdown-divider"></div>

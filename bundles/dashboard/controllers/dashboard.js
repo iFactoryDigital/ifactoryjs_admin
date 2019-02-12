@@ -66,7 +66,7 @@ class DashboardController extends Controller {
       blockModel.set('content', req.body.data.content);
 
       // save block
-      await blockModel.save();
+      await blockModel.save(req.user);
     });
   }
 
@@ -168,7 +168,7 @@ class DashboardController extends Controller {
     if (req.body.placement) dashboard.set('placement', await Placement.findById(req.body.placement.id));
 
     // save dashboard
-    await dashboard.save();
+    await dashboard.save(req.user);
 
     // send alert
     req.alert('success', `Successfully ${create ? 'Created' : 'Updated'} dashboard!`);
@@ -205,7 +205,7 @@ class DashboardController extends Controller {
     req.alert('success', `Successfully removed ${dashboard.get('_id').toString()}`);
 
     // delete website
-    await dashboard.remove();
+    await dashboard.remove(req.user);
 
     // return JSON
     res.json({
