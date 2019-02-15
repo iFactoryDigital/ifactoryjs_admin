@@ -1,4 +1,5 @@
 // Require local class dependencies
+const config     = require('config');
 const Controller = require('controller');
 
 // require models
@@ -57,6 +58,42 @@ class AdminController extends Controller {
       type       : 'admin.home',
       blocks     : BlockHelper.renderBlocks('admin'),
       jumbotron  : `Welcome back, ${req.user.get('username')}!`,
+      dashboards : await Promise.all(dashboards.map(async (dashboard, i) => {
+        // return sanitise promise
+        return dashboard.sanitise(i === 0 ? req : null);
+      })),
+    });
+  }
+
+  /**
+   * Admin index action
+   *
+   * @param    {Request}  req Express request
+   * @param    {Response} res Express response
+   *
+   * @menu     {ADMIN} Admin Config
+   * @icon     fa fa-cog
+   * @view     admin
+   * @route    {get}   /config
+   * @layout   admin
+   * @priority -100
+   */
+  async configAction(req, res) {
+    // get dashboards
+    const dashboards = await Dashboard.where({
+      type : 'admin.config',
+    }).or({
+      'user.id' : req.user.get('_id').toString(),
+    }, {
+      public : true,
+    }).find();
+
+    // Render admin page
+    res.render('admin', {
+      name       : 'Admin Config',
+      type       : 'admin.config',
+      blocks     : BlockHelper.renderBlocks('admin'),
+      jumbotron  : `${config.get('title')} config`,
       dashboards : await Promise.all(dashboards.map(async (dashboard, i) => {
         // return sanitise promise
         return dashboard.sanitise(i === 0 ? req : null);

@@ -13,13 +13,8 @@
         </div>
         <main class="eden-admin-nav">
           <div class="collapse navbar-collapse" id="navbar-nav">
-            
+
             <ul class="navbar-nav flex-row ml-auto mr-lg-0">
-              <li class="nav-item">
-                <a class="nav-link pr-2" href="/search">
-                  <i class="fa fa-search" />
-                </a>
-              </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle mr-3 mr-lg-0" id="admin-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                   <i class="fa fa-user mr-2" />
@@ -35,7 +30,7 @@
                 </div>
               </li>
             </ul>
-            
+
           </div>
         </main>
       </nav>
