@@ -136,11 +136,12 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
         // active/hover augment
         &.active,
         &:hover {
-          width    : auto;
-          overflow : initial;
 
           // hover nav
           &:hover {
+            width    : auto;
+            overflow : initial;
+
             .nav-pills.level-1 {
               display : block;
             }
