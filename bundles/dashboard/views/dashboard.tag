@@ -19,7 +19,7 @@
 
             <i if={ !this.dashboard.get('name') && !this.updating.name }>Untitled Dashboard</i>
             <span if={ !this.updating.name || this.loading.name }>{ this.dashboard.get('name') }</span>
-            <i contenteditable={ this.updating.name } if={ this.updating.name && !this.loading.name } class="d-inline-block" ref="name" onkeyup={ onUpdateName }>{ this.dashboard.get('name') }</i>
+            <i contenteditable={ this.updating.name } if={ this.updating.name && !this.loading.name } class="d-inline-block" ref="name" onkeyup={ onUpdateName }></i>
 
             <div class="dropdown d-inline-block">
               <a href="#" class="ml-3" id="select-dashboard" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
