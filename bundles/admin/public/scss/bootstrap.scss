@@ -193,7 +193,6 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
   .eden-admin-main {
     margin-top  : $eden-admin-navbar-height;
     min-height  : calc(100vh - #{$eden-admin-navbar-height});
-    overflow-y  : scroll;
     margin-left : $eden-admin-aside-width;
 
     // container dashbaord
