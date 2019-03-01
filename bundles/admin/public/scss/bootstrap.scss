@@ -53,6 +53,7 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
 
       // alter nav padding
       .eden-admin-nav {
+        margin-left   : auto;
         padding-left  : $spacer;
         padding-right : $spacer;
       }
@@ -185,7 +186,7 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
   // make navbar width
   .eden-admin-main,
   .eden-admin-nav {
-    width : calc(100vw - #{$eden-admin-aside-width});
+    width : auto;
   }
 
   // set main height
