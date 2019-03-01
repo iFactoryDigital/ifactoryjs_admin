@@ -190,7 +190,8 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
 
   // set main height
   .eden-admin-main {
-    height      : calc(100vh - #{$eden-admin-navbar-height});
+    margin-top  : $eden-admin-navbar-height;
+    min-height  : calc(100vh - #{$eden-admin-navbar-height});
     overflow-y  : scroll;
     margin-left : $eden-admin-aside-width;
 
