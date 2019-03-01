@@ -6,6 +6,7 @@
 $eden-admin-primary: #563d7c!default;
 
 // eden admin variables
+$eden-admin-navbar-index: 99!default;
 $eden-admin-navbar-height: ($spacer * 4)!default;
 $eden-admin-menu-background: $eden-admin-primary!default;
 
@@ -18,8 +19,6 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
 
 // eden admin styling
 .eden-admin {
-  width      : 100vw;
-  height     : 100vh;
   overflow-x : hidden;
 
   // set admin
@@ -29,7 +28,12 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
 
   // set navbar height
   .eden-admin-navbar {
-    height : $eden-admin-navbar-height;
+    top      : 0;
+    left     : 0;
+    right    : 0;
+    height   : $eden-admin-navbar-height;
+    z-index  : $eden-admin-navbar-index;
+    position : fixed;
 
     // set navbar
     .navbar {
@@ -64,7 +68,11 @@ $eden-admin-aside-hover-background: darken($eden-admin-primary, 15%)!default;
 
   // set aside height
   .eden-admin-aside {
+    top        : $eden-admin-navbar-height;
+    left       : 0;
     height     : calc(100vh - #{$eden-admin-navbar-height});
+    z-index    : $eden-admin-navbar-index;
+    position   : fixed;
     background : $eden-admin-aside-background;
 
     // alter pills
