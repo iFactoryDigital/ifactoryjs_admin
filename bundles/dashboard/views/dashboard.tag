@@ -7,7 +7,7 @@
 
             <!-- update buttons -->
             <a href="#" onclick={ onShouldUpdateName } if={ !this.updating.name && !this.loading.name }>
-              <i class="fa fa-update fa-pencil" />
+              <i class="fa fa-update fa-pencil-alt" />
             </a>
             <a href="#" onclick={ onCompleteUpdateName } if={ this.updating.name && !this.loading.name }>
               <i class="fa fa-update fa-check bg-success text-white" />
