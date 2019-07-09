@@ -107,4 +107,4 @@ class AdminController extends Controller {
  *
  * @type {AdminController}
  */
-exports = module.exports = AdminController;
+module.exports = AdminController;

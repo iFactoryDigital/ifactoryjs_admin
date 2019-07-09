@@ -132,9 +132,9 @@ class DashboardController extends Controller {
    * @route  {post} /create
    * @layout admin
    */
-  createAction() {
+  createAction(...args) {
     // return update action
-    return this.updateAction(...arguments);
+    return this.updateAction(...args);
   }
 
   /**

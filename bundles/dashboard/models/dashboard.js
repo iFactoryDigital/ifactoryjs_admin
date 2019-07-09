@@ -7,14 +7,6 @@ const Model = require('model');
  */
 class Dashboard extends Model {
   /**
-   * construct dashboard model
-   */
-  constructor() {
-    // run super
-    super(...arguments);
-  }
-
-  /**
    * sanitises dashboard
    *
    * @return {Promise}
@@ -35,4 +27,4 @@ class Dashboard extends Model {
  * export user class
  * @type {user}
  */
-exports = module.exports = Dashboard;
+module.exports = Dashboard;
