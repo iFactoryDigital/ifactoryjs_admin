@@ -68,7 +68,7 @@ const data = await Promise.all(dashboards.map(dash => dash.sanitise()));
 res.render('dashboard/home', {
   blocks     : blockHelper.renderBlocks('admin'), // render blocks can be namespaced
   dashboards : data,
-})
+});
 ```
 
 In the view `dashboard/home.tag` _[Usage](https://github.com/eden-js/admin/blob/master/bundles/admin/views/admin.tag#L6)_
@@ -88,5 +88,5 @@ The admin header view creates a common admin header component for use in admin l
 In the view
 
 ```jsx
-<admin-header title="Admin Header Title">
+<admin-header title="Admin Header Title" />
 ```
