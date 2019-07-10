@@ -78,3 +78,15 @@ In the view `dashboard/home.tag` _[Usage](https://github.com/eden-js/admin/blob/
   <dashboard dashboards={ opts.dashboards } blocks={ opts.blocks } type="my.dashboard" name="My Dashboard" />
 </dashboard-home-page>
 ```
+
+### `<admin-header>` _[Usage](https://github.com/eden-js/admin/blob/master/bundles/admin/views/admin/header.tag)_
+
+The admin header view creates a common admin header component for use in admin layout pages.
+
+#### Example
+
+In the view
+
+```jsx
+<admin-header title="Admin Header Title">
+```
