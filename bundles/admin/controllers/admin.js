@@ -6,7 +6,7 @@ const Controller = require('controller');
 const Dashboard = model('dashboard');
 
 // get helpers
-const BlockHelper = helper('cms/block');
+const blockHelper = helper('cms/block');
 
 /**
  * Create Admin Controller class. Only visible to people with the 'admin.view' role
@@ -56,7 +56,7 @@ class AdminController extends Controller {
     res.render('admin', {
       name       : 'Admin Home',
       type       : 'admin.home',
-      blocks     : BlockHelper.renderBlocks('admin'),
+      blocks     : blockHelper.renderBlocks('admin'),
       jumbotron  : `Welcome back, ${req.user.get('username')}!`,
       dashboards : await Promise.all(dashboards.map(async (dashboard, i) => {
         // return sanitise promise
@@ -92,7 +92,7 @@ class AdminController extends Controller {
     res.render('admin', {
       name       : 'Admin Config',
       type       : 'admin.config',
-      blocks     : BlockHelper.renderBlocks('admin'),
+      blocks     : blockHelper.renderBlocks('admin'),
       jumbotron  : `${config.get('title')} config`,
       dashboards : await Promise.all(dashboards.map(async (dashboard, i) => {
         // return sanitise promise
