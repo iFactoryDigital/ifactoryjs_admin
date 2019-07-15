@@ -71,13 +71,13 @@
         super.onBeforeMount(...arguments);
 
         // set dashboards
-        this.dashboards = (props.dashboards || []).map((dash) => this.eden.get('model.get')('dashboard', dash, dash.id));
+        this.dashboards = (props.dashboards || []).map((dash) => this.eden.get('model.get')('dashboard', dash.id, dash));
 
         // set update
         this.type       = props.type;
         this.isUpdate   = false;
         this.updating   = {};
-        this.dashboard  = this.dashboards.length ? this.dashboards[0] : this.eden.get('model.get')('dashboard', {});
+        this.dashboard  = this.dashboards.length ? this.dashboards[0] : this.eden.get('model.get')('dashboard', null, {});
         this.showSelect = false;
 
         // set placements
@@ -144,7 +144,7 @@
         e.stopPropagation();
 
         // set dashboard
-        this.dashboard = this.eden.get('model.get')('dashboard', e.item.dash, e.item.dash.id);
+        this.dashboard = this.eden.get('model.get')('dashboard', e.item.dash.id, e.item.dash);
 
         // save
         this.update();
