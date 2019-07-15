@@ -1,6 +1,6 @@
 {
   "name": "@edenjs/admin",
-  "version": "1.2.16",
+  "version": "1.2.17",
   "description": "",
   "dependencies": {
     "dragula": "^3.7.2"
