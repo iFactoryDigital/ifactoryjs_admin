@@ -5,7 +5,7 @@ const Controller = require('controller');
 // require models
 const Block     = model('block');
 const Dashboard = model('dashboard');
-const Placement = model('placement');
+const Placement = model('editablePlacement');
 
 // require helpers
 const ModelHelper = helper('model');

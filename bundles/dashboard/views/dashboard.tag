@@ -5,25 +5,15 @@
         <div class="col-md-8">
           <h2 class="m-0" id="dashboard-select">
 
-            <!-- update buttons -->
-            <a href="#" onclick={ onShouldUpdateName } if={ !this.updating.name && !this.loading.name }>
-              <i class="fa fa-update fa-pencil-alt" />
-            </a>
-            <a href="#" onclick={ onCompleteUpdateName } if={ this.updating.name && !this.loading.name }>
-              <i class="fa fa-update fa-check bg-success text-white" />
-            </a>
-            <span if={ this.loading.name }>
-              <i class="fa fa-update fa-spinner fa-spin bg-info text-white" />
-            </span>
-            <!-- / update buttons -->
-
-            <i if={ !this.dashboard.get('name') && !this.updating.name }>Untitled Dashboard</i>
-            <span if={ !this.updating.name || this.loading.name }>{ this.dashboard.get('name') }</span>
-            <i contenteditable={ this.updating.name } if={ this.updating.name && !this.loading.name } class="d-inline-block" ref="name" onkeyup={ onUpdateName }></i>
+            <!-- names -->
+            <div class="d-inline-block px-3 py-2" if={ !this.updating.name } onclick={ onShouldUpdateName }>{ this.dashboard.get('name') }</div>
+            <div class="d-inline-block px-3 py-2 border border-dark border-dash" if={ this.updating.name } onblur={ onCompleteUpdateName } ref="name" contenteditable>{ this.dashboard.get('name') }</div>
+            <!-- / names -->
 
             <div class="dropdown d-inline-block">
-              <a href="#" class="ml-3" id="select-dashboard" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-chevron-down" />
+              <a href="#" class="ml-3 btn btn-primary" id="select-dashboard" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select Dashboard
+                <i class="fa fa-chevron-down ml-2" />
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="select-dashboard">
                 <a href="#" each={ dash, i in opts.dashboards || [] } class={ 'dropdown-item' : true, 'active' : dashboard.get('id') === dash.id } onclick={ onDashboard }>
@@ -36,6 +26,7 @@
                 </a>
               </div>
             </div>
+            
           </h2>
         </div>
         <div class="col-md-4 text-right d-flex align-items-center">
@@ -50,7 +41,7 @@
         </div>
       </div>
     </div>
-    <div data-is="eden-blocks" placement={ Object.assign({}, this.dashboard.get('placement') || {}) } position={ this.dashboard.get('id') } for="dashboard" preview={ !this.isUpdate } blocks={ opts.blocks } type={ opts.type } on-save={ onPlacement } positions={ this.positions } />
+    <div data-is="eden-editable" placement={ Object.assign({}, this.dashboard.get('placement') || {}) } position={ this.dashboard.get('id') } for="dashboard" preview={ !this.isUpdate } blocks={ opts.blocks } type={ opts.type } on-save={ onPlacement } positions={ this.positions } />
   </div>
 
   <script>
@@ -120,7 +111,7 @@
       this.dashboards.push(this.dashboard);
 
       // save
-      this.update();
+      this.onShouldUpdateName(e);
     }
 
     /**

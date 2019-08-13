@@ -36,7 +36,7 @@
       </nav>
     </div>
     <aside class="eden-admin-aside">
-      <menu name="ADMIN" base="/admin" classes={ this.adminMenuClass } />
+      <div is="eden-menu" name="ADMIN" base="/admin" classes={ this.adminMenuClass } />
     </aside>
     <main class="eden-admin-main">
       <div is={ state.view } { ...state } class="main-page" />
