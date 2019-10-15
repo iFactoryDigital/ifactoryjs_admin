@@ -1,8 +1,8 @@
 # EdenJS - Admin
-[![TravisCI](https://travis-ci.com/eden-js/admin.svg?branch=master)](https://travis-ci.com/eden-js/admin)
-[![Issues](https://img.shields.io/github/issues/eden-js/admin.svg)](https://github.com/eden-js/admin/issues)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/eden-js/admin)
-[![Awesome](https://img.shields.io/badge/awesome-true-green.svg)](https://github.com/eden-js/admin)
+[![TravisCI](https://travis-ci.com/ifactorydigital/ifactoryjs_admin.svg?branch=master)](https://travis-ci.com/ifactorydigital/ifactoryjs_admin)
+[![Issues](https://img.shields.io/github/issues/ifactorydigital/ifactoryjs_admin.svg)](https://github.com/ifactorydigital/ifactoryjs_admin/issues)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ifactorydigital/ifactoryjs_admin)
+[![Awesome](https://img.shields.io/badge/awesome-true-green.svg)](https://github.com/ifactorydigital/ifactoryjs_admin)
 [![Discord](https://img.shields.io/discord/583845970433933312.svg)](https://discord.gg/5u3f3up)
 
 Administrator base logic component for [EdenJS](https://github.com/edenjs-cli)
@@ -23,7 +23,7 @@ No configuration is required for this module
 
 ## Models
 
-### `Dashboard` _[Usage](https://github.com/eden-js/admin/blob/master/bundles/dashboard/models/dashboard.js)_
+### `Dashboard` _[Usage](https://github.com/ifactorydigital/ifactoryjs_admin/blob/master/bundles/dashboard/models/dashboard.js)_
 
 Dashboard model consists of a single configurable dashboard instance. These are created in the frontend through the api.
 
@@ -46,13 +46,13 @@ No hooks created in this module
 
 ## Views
 
-### `<dashboard>` _[Usage](https://github.com/eden-js/admin/blob/master/bundles/dashboard/views/dashboard.tag)_
+### `<dashboard>` _[Usage](https://github.com/ifactorydigital/ifactoryjs_admin/blob/master/bundles/dashboard/views/dashboard.tag)_
 
 The dashboard view creates an instance of a dashboard container, this provides a fully configurable dashboard area.
 
 #### Example
 
-In the controller _[Usage](https://github.com/eden-js/admin/blob/master/bundles/admin/controllers/admin.js#L45)_
+In the controller _[Usage](https://github.com/ifactorydigital/ifactoryjs_admin/blob/master/bundles/admin/controllers/admin.js#L45)_
 
 ```jsx
 // require helper
@@ -71,7 +71,7 @@ res.render('dashboard/home', {
 });
 ```
 
-In the view `dashboard/home.tag` _[Usage](https://github.com/eden-js/admin/blob/master/bundles/admin/views/admin.tag#L6)_
+In the view `dashboard/home.tag` _[Usage](https://github.com/ifactorydigital/ifactoryjs_admin/blob/master/bundles/admin/views/admin.tag#L6)_
 
 ```jsx
 <dashboard-home-page>
@@ -79,7 +79,7 @@ In the view `dashboard/home.tag` _[Usage](https://github.com/eden-js/admin/blob/
 </dashboard-home-page>
 ```
 
-### `<admin-header>` _[Usage](https://github.com/eden-js/admin/blob/master/bundles/admin/views/admin/header.tag)_
+### `<admin-header>` _[Usage](https://github.com/ifactorydigital/ifactoryjs_admin/blob/master/bundles/admin/views/admin/header.tag)_
 
 The admin header view creates a common admin header component for use in admin layout pages.
 

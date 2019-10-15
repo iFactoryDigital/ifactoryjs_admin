@@ -1,5 +1,5 @@
 {
-  "name": "@edenjs/admin",
+  "name": "@ifactoryjs/admin",
   "version": "1.2.18",
   "description": "",
   "dependencies": {
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eden-js/admin.git"
+    "url": "git+https://github.com/ifactorydigital/ifactoryjs_admin.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/eden-js/admin/issues"
+    "url": "https://github.com/ifactorydigital/ifactoryjs_admin/issues"
   },
-  "homepage": "https://github.com/eden-js/admin#readme",
+  "homepage": "https://github.com/ifactorydigital/ifactoryjs_admin#readme",
   "devDependencies": {
     "@edenjs/eslint-config-eden": "^2.0.14",
     "eslint": "^5.13.0",
